@@ -2,9 +2,10 @@ import os
 import subprocess as sub
 import shlex
 from dateutil import parser
+from collections import Iterator
 
 
-class Repo:
+class Repo(Iterator):
 
     def __init__(self):
         self.path = None
@@ -13,6 +14,11 @@ class Repo:
         self._log_format = ['%H', '%an', '%ae', '%s', '%ad']
         self._log_field = ['id', 'author_name', 'author_email',
                            'subject', 'date']
+
+    def next(self):
+        if not self.commits:
+            raise StopIteration
+        return self.commits.pop()
 
     def read_repo(self, path, month):
         log_format = '%x1f'.join(self._log_format)
@@ -60,4 +66,5 @@ if __name__ == "__main__":
 
     r = Repo()
     r.read_repo(sys.argv[1], 5)
-    print r.commits
+    for commit in r:
+        print commit
