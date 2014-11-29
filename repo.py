@@ -15,6 +15,9 @@ class Repo(Iterator):
         self._log_field = ['id', 'author_name', 'author_email',
                            'subject', 'date']
 
+    def __len__(self):
+        return len(self.commits)
+
     def next(self):
         if not self.commits:
             raise StopIteration
@@ -66,5 +69,6 @@ if __name__ == "__main__":
 
     r = Repo()
     r.read_repo(sys.argv[1], 5)
+    print len(r)
     for commit in r:
         print commit
