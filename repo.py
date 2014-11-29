@@ -62,13 +62,3 @@ class Repo(Iterator):
         commit['change'] = diffs
         commit['date'] = parser.parse(commit['date'])
         self.commits.append(commit)
-
-
-if __name__ == "__main__":
-    import sys
-
-    r = Repo()
-    r.read_repo(sys.argv[1], 5)
-    print len(r)
-    for commit in r:
-        print commit
