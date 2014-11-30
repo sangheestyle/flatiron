@@ -9,7 +9,6 @@ class Repo:
     def __init__(self):
         self._path = None
         self._commits = []
-        self._read = False
         self._log_format = ['%H', '%an', '%ae', '%s', '%ad']
         self._log_field = ['id', 'author_name', 'author_email',
                            'subject', 'date']
