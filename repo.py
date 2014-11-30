@@ -7,28 +7,33 @@ from dateutil import parser
 class Repo:
 
     def __init__(self):
-        self.path = None
-        self.commits = []
+        self._path = None
+        self._commits = []
         self._read = False
         self._log_format = ['%H', '%an', '%ae', '%s', '%ad']
         self._log_field = ['id', 'author_name', 'author_email',
                            'subject', 'date']
 
     def __len__(self):
-        return len(self.commits)
+        return len(self._commits)
 
     def __iter__(self):
-        for commit in self.commits:
+        for commit in self._commits:
             yield commit
 
+    @property
+    def path(self):
+        return self._path
+
     def read_repo(self, path, month):
+        self._path = path
         log_format = '%x1f'.join(self._log_format)
         log_format = '%x1e' + log_format
         exp = "git log --no-merges --numstat --since=" \
               + str(month) + "month"
         exp += " "  # avoiding error due to no space btn next expression
         exp = exp + " --format=" + "'" + log_format + "'"
-        os.chdir(path)
+        os.chdir(self._path)
         p = sub.Popen(shlex.split(exp), stdout=sub.PIPE, stderr=sub.PIPE)
         (log, _) = p.communicate()
         self._parse_log(log)
@@ -59,4 +64,4 @@ class Repo:
         commit.update(summary)
         commit['change'] = diffs
         commit['date'] = parser.parse(commit['date'])
-        self.commits.append(commit)
+        self._commits.append(commit)
