@@ -38,7 +38,7 @@ class Repo:
         self._parse_log(log)
 
     def _parse_log(self, log):
-        assert log, "empty log"
+        assert log, "log is empty"
 
         log = log.split('\x1e')
         log.pop(0)  # first item is always empty
@@ -46,7 +46,7 @@ class Repo:
             self._parse_commit(raw_commit)
 
     def _parse_commit(self, raw_commit):
-        assert raw_commit, "empty raw_commit"
+        assert raw_commit, "raw_commit is empty: %r" % raw_commit
 
         raw_commit = raw_commit.split('\n')
         raw_commit.pop()  # last item is always empty
