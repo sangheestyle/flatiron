@@ -36,8 +36,8 @@ class Repo:
         os.chdir(self._path)
         p = sub.Popen(shlex.split(exp), stdout=sub.PIPE, stderr=sub.PIPE)
         (log, _) = p.communicate()
-        self._parse_log(log)
         os.chdir(current_dir)
+        self._parse_log(log)
 
     def _parse_log(self, log):
         assert log, "log is empty"
@@ -54,15 +54,18 @@ class Repo:
         raw_commit.pop()  # last item is always empty
         summary = raw_commit.pop(0)
         summary = dict(zip(self._log_field, summary.split('\x1f')))
-        raw_commit.pop(0)  # next item is alwaus empty
-        diffs = []
-        diff_field = ['ins', 'del', 'filename']
-        for diff in raw_commit:
-            diff = diff.split('\t')
-            diff = [int(ii) if ii.isdigit() else ii for ii in diff]
-            diffs.append(dict(zip(diff_field, diff)))
         commit = {}
+        if raw_commit:
+            raw_commit.pop(0)  # next item is alwaus empty
+            diffs = []
+            diff_field = ['ins', 'del', 'filename']
+            for diff in raw_commit:
+                diff = diff.split('\t')
+                diff = [int(ii) if ii.isdigit() else ii for ii in diff]
+                diffs.append(dict(zip(diff_field, diff)))
+            commit['change'] = diffs
+        else:
+            commit['change'] = []
         commit.update(summary)
-        commit['change'] = diffs
         commit['date'] = parser.parse(commit['date'])
         self._commits.append(commit)
