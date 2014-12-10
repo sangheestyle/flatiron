@@ -32,10 +32,12 @@ class Repo:
               + str(month) + "month"
         exp += " "  # avoiding error due to no space btn next expression
         exp = exp + " --format=" + "'" + log_format + "'"
+        current_dir = os.getcwd()
         os.chdir(self._path)
         p = sub.Popen(shlex.split(exp), stdout=sub.PIPE, stderr=sub.PIPE)
         (log, _) = p.communicate()
         self._parse_log(log)
+        os.chdir(current_dir)
 
     def _parse_log(self, log):
         assert log, "log is empty"
