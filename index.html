@@ -31,7 +31,7 @@
 function title(d) { return d.id+" "+d.insertions; }
 function group(d) { return d.company; }
 
-var color = d3.scale.category10();
+var color = d3.scale.category20();
 function colorByGroup(d) { return color(group(d)); }
 
 var width = 1280,
