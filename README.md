@@ -23,6 +23,7 @@ Just do the following.
 $ python generate_json.py --g ../base --o developers.json --m 2
 Number of vertices: 48
 ```
+Then, open index.html file with Firefox!
 
 You need to clone git repository before using flatiron. For example, I alread cloned `base` repository from AOSP for above command.
 
