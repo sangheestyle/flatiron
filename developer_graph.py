@@ -25,13 +25,6 @@ class DeveloperGraph(object):
     def read_repo(self, repo):
         for commit in repo:
             self._build_graph(commit)
-        top_nodes = set(n for n, d in self._g.nodes(data=True) if d['bipartite'] == 0)
-        bottom_nodes = set(self._g) - top_nodes
-        self._projected_graph = nx.bipartite.projected_graph(self._g, top_nodes)
-        remove = [node for node, degree
-                  in self._projected_graph.degree().items()
-                  if degree < 1]
-        self._projected_graph.remove_nodes_from(remove)
 
     def _build_graph(self, commit):
         author_email = commit['author_email']
@@ -54,6 +47,21 @@ class DeveloperGraph(object):
                 else:
                     self._g.node[author_email]["deletions"] += deletions
                     self._g.node[author_email]["insertions"] += insertions
+
+    def project(self, mode=0):
+        """
+        Make general graph a one-mode projection graph
+
+        Parameters:
+            mode: 0 is developer, 1 is file
+        """
+        top_nodes = set(n for n, d in self._g.nodes(data=True) if d['bipartite'] == mode)
+        bottom_nodes = set(self._g) - top_nodes
+        self._projected_graph = nx.bipartite.projected_graph(self._g, top_nodes)
+        remove = [node for node, degree
+                  in self._projected_graph.degree().items()
+                  if degree < 1]
+        self._projected_graph.remove_nodes_from(remove)
 
     def write_json(self, output_path):
         d3_formatted = json_graph.node_link_data(self._projected_graph)
