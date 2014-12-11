@@ -20,14 +20,26 @@ r = Repo()
 r.read_repo(git_dir_path, 2)
 g = nx.Graph()
 for commit in r:
+    author_email = commit['author_email']
+    company = author_email.split('@')[-1]
+    g.add_node(author_email, bipartite=0, company=company)
     for change in commit['change']:
         if change['del'] > 0 and change['ins'] > 0:
-            company = commit['author_email'].split('@')[-1]
-            g.add_node(commit['author_email'],
-                       bipartite=0,
-                       company=company)
             g.add_node(change['filename'], bipartite=1)
             g.add_edge(commit['author_email'], change['filename'])
+            insertions = 0
+            deletions = 0
+            if type(change['del']) is int:
+                deletions = change['del']
+            if type(change['ins']) is int:
+                insertions = change['ins']
+            if ("deletions" not in g.node[author_email]) or \
+               ("insertions" not in g.node[author_email]):
+                g.node[author_email].update({"deletions":deletions})
+                g.node[author_email].update({"insertions":insertions})
+            else:
+                g.node[author_email]["deletions"] += deletions
+                g.node[author_email]["insertions"] += insertions
 top_nodes = set(n for n, d in g.nodes(data=True) if d['bipartite'] == 0)
 bottom_nodes = set(g) - top_nodes
 dev_graph = nx.bipartite.projected_graph(g, top_nodes)
