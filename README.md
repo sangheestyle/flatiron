@@ -2,7 +2,7 @@ flatiron
 ========
 
 ## What's this?
-A simple version of mining git repository and drawing graph for showing developers' relationship.
+A simple version of mining git repository and drawing graph for showing developers' relationship. The D3 visualization is based on Couchand's block [6420534](http://bl.ocks.org/couchand/6420534).
 
 This graph was built by the following.
 
