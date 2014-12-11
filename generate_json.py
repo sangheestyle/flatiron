@@ -1,11 +1,20 @@
 import sys
 import json
+import argparse
+
 import networkx as nx
 from networkx.readwrite import json_graph
+
 from repo import Repo
 
-git_dir_path = sys.argv[1]
-output_file = sys.argv[2]
+
+parser = argparse.ArgumentParser(description='Generate node link data to be used by presenter')
+parser.add_argument('--g', help="Git repo path", type=str, required=True)
+parser.add_argument('--o', help="Output file name", type=str, required=True)
+args = parser.parse_args()
+
+git_dir_path = args.g
+output_file = args.o
 
 r = Repo()
 r.read_repo(git_dir_path, 2)
