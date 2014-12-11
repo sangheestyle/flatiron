@@ -34,8 +34,8 @@ function group(d) { return d.company; }
 var color = d3.scale.category20();
 function colorByGroup(d) { return color(group(d)); }
 
-var width = 1024,
-    height = 1024;
+var width = 1280,
+    height = 800;
 
 var svg = d3.select('#viz')
     .append('svg')
