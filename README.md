@@ -20,7 +20,7 @@ You might want to know what the graph represents
 Just do the following.
 
 ```shell
-$ python generate_json.py --g ../base --o developers.json --m 2
+$ python generate_json.py --g ../android_frameworks_base/ --o developers.json --m 3 --ext java
 Number of vertices: 48
 ```
 Then, open index.html file with Firefox!
