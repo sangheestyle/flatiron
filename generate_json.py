@@ -9,6 +9,7 @@ parser = argparse.ArgumentParser(description='Generate node link data to be used
 parser.add_argument('--g', help="Git repo path", type=str, required=True)
 parser.add_argument('--o', help="Output file name", type=str, required=True)
 parser.add_argument('--m', help="Past n month", type=str, required=True)
+parser.add_argument('--ext', help="Only files having given extension", type=str, default=None)
 args = parser.parse_args()
 
 git_dir_path = args.g
@@ -18,6 +19,6 @@ r = Repo()
 r.read_repo(git_dir_path, args.m)
 dev_graph = DeveloperGraph()
 dev_graph.read_repo(r)
-dev_graph.project()
+dev_graph.project(ext=args.ext)
 print "Number of vertices:", len(dev_graph.projected_graph)
 dev_graph.write_json(args.o)
